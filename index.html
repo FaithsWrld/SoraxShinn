@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sora &amp; Shin — One Year of Us 💕</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Raleway:wght@300;400;500;600&family=Dancing+Script:wght@400;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ===========================
+       RESET & BASE
+    =========================== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --crimson:     #DC143C;
+      --crimson-dark:#A50E2D;
+      --crimson-deep:#7B0A21;
+      --rose:        #FF6B8A;
+      --blush:       #FFD6E0;
+      --blush-light: #FFF0F3;
+      --white:       #FFFFFF;
+      --cream:       #FFF8F0;
+      --text-dark:   #2C1A1A;
+      --text-mid:    #5A2A2A;
+      --shadow:      rgba(220,20,60,0.25);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Raleway', sans-serif;
+      background: var(--white);
+      color: var(--text-dark);
+      overflow-x: hidden;
+    }
+
+    /* ===========================
+       PETALS / HEARTS ANIMATION
+    =========================== */
+    #petals-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ===========================
+       HERO SECTION
+    =========================== */
+    #hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background: linear-gradient(135deg,
+        #7B0A21 0%,
+        #A50E2D 25%,
+        #DC143C 55%,
+        #C71F3F 75%,
+        #8B0020 100%);
+      overflow: hidden;
+      padding: 2rem;
+    }
+
+    #hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 40%,
+        rgba(255,200,210,0.15) 0%,
+        transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      animation: fadeInDown 1.2s ease both;
+    }
+
+    .hero-hearts {
+      font-size: 2rem;
+      letter-spacing: .5rem;
+      margin-bottom: 1.2rem;
+      opacity: .85;
+      animation: pulse 3s ease-in-out infinite;
+    }
+
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 9vw, 7rem);
+      font-weight: 700;
+      color: var(--white);
+      text-shadow: 0 4px 30px rgba(0,0,0,0.4),
+                   0 0 80px rgba(255,160,180,0.3);
+      line-height: 1.1;
+      margin-bottom: .6rem;
+    }
+
+    .hero-sub {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: clamp(1.3rem, 3.5vw, 2.2rem);
+      color: var(--blush);
+      text-shadow: 0 2px 12px rgba(0,0,0,0.3);
+      margin-bottom: 2rem;
+    }
+
+    .hero-date {
+      display: inline-block;
+      font-family: 'Raleway', sans-serif;
+      font-weight: 500;
+      font-size: clamp(.9rem, 2.5vw, 1.2rem);
+      letter-spacing: .25rem;
+      text-transform: uppercase;
+      color: var(--blush-light);
+      border: 1px solid rgba(255,255,255,0.35);
+      padding: .55rem 1.8rem;
+      border-radius: 50px;
+      backdrop-filter: blur(4px);
+      background: rgba(255,255,255,0.08);
+    }
+
+    /* Floating petal emojis */
+    .petal {
+      position: fixed;
+      top: -60px;
+      font-size: 1.4rem;
+      animation: fall linear infinite;
+      pointer-events: none;
+      z-index: 1;
+      user-select: none;
+    }
+
+    @keyframes fall {
+      0%   { transform: translateY(0) rotate(0deg) translateX(0); opacity: 1; }
+      80%  { opacity: .7; }
+      100% { transform: translateY(110vh) rotate(360deg) translateX(60px); opacity: 0; }
+    }
+
+    /* ===========================
+       SECTION SHARED
+    =========================== */
+    section {
+      padding: 5rem 1.5rem;
+    }
+
+    .section-inner {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-family: 'Raleway', sans-serif;
+      font-size: .8rem;
+      font-weight: 600;
+      letter-spacing: .3rem;
+      text-transform: uppercase;
+      color: var(--crimson);
+      margin-bottom: .8rem;
+      opacity: .85;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      color: var(--text-dark);
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+
+    .section-divider {
+      display: flex;
+      align-items: center;
+      gap: .8rem;
+      margin: 0 auto 3rem;
+      max-width: 300px;
+    }
+    .section-divider span { height: 1px; flex: 1; background: var(--crimson); opacity: .35; }
+    .section-divider i { font-size: 1.1rem; }
+
+    /* Reveal on scroll */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity .8s ease, transform .8s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ===========================
+       COUNTDOWN
+    =========================== */
+    #countdown {
+      background: linear-gradient(135deg, #7B0A21 0%, #DC143C 100%);
+      color: var(--white);
+      text-align: center;
+    }
+
+    #countdown .section-title { color: var(--white); }
+    #countdown .section-label { color: var(--blush); opacity: 1; }
+
+    .countdown-grid {
+      display: flex;
+      justify-content: center;
+      gap: 1.2rem;
+      flex-wrap: wrap;
+      margin-top: 2.5rem;
+    }
+
+    .cd-box {
+      background: rgba(255,255,255,0.12);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 16px;
+      padding: 1.6rem 1.8rem;
+      min-width: 110px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+      transition: transform .3s ease;
+    }
+    .cd-box:hover { transform: translateY(-5px); }
+
+    .cd-number {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-weight: 700;
+      line-height: 1;
+      color: var(--white);
+      text-shadow: 0 2px 12px rgba(0,0,0,0.3);
+    }
+
+    .cd-label {
+      font-size: .7rem;
+      font-weight: 600;
+      letter-spacing: .2rem;
+      text-transform: uppercase;
+      color: var(--blush);
+      margin-top: .4rem;
+    }
+
+    #countdown-expired {
+      display: none;
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 2rem;
+      color: var(--blush);
+      margin-top: 2rem;
+    }
+
+    /* ===========================
+       LOVE LETTER
+    =========================== */
+    #letter {
+      background: var(--cream);
+    }
+
+    .letter-wrapper {
+      background: var(--white);
+      border-radius: 4px;
+      padding: clamp(2rem, 6vw, 4rem);
+      box-shadow:
+        0 2px 4px rgba(0,0,0,0.04),
+        0 8px 40px rgba(220,20,60,0.08),
+        4px 4px 0 var(--blush),
+        -4px -4px 0 var(--blush);
+      border-top: 4px solid var(--crimson);
+      max-width: 680px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .letter-wrapper::before {
+      content: '🌹';
+      position: absolute;
+      top: -1.2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 2rem;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
+    }
+
+    .letter-date {
+      font-family: 'Dancing Script', cursive;
+      font-size: 1.1rem;
+      color: var(--text-mid);
+      text-align: right;
+      margin-bottom: 1.5rem;
+      opacity: .8;
+    }
+
+    .letter-salutation {
+      font-family: 'Dancing Script', cursive;
+      font-size: 1.9rem;
+      color: var(--crimson);
+      margin-bottom: 1.2rem;
+      font-weight: 600;
+    }
+
+    .letter-body {
+      font-family: 'Dancing Script', cursive;
+      font-size: 1.15rem;
+      line-height: 2;
+      color: var(--text-mid);
+    }
+
+    .letter-body p { margin-bottom: 1.2rem; }
+
+    .letter-sign {
+      font-family: 'Dancing Script', cursive;
+      font-size: 1.6rem;
+      color: var(--crimson);
+      margin-top: 1.5rem;
+      font-weight: 700;
+    }
+
+    /* ===========================
+       TIMELINE
+    =========================== */
+    #timeline {
+      background: var(--blush-light);
+    }
+
+    .timeline {
+      position: relative;
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 1rem 0;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 0; bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, transparent, var(--crimson) 10%, var(--crimson) 90%, transparent);
+      transform: translateX(-50%);
+    }
+
+    .tl-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 3.5rem;
+      position: relative;
+    }
+
+    .tl-item:nth-child(odd) { flex-direction: row; }
+    .tl-item:nth-child(even) { flex-direction: row-reverse; }
+
+    .tl-card {
+      background: var(--white);
+      border-radius: 14px;
+      padding: 1.4rem 1.6rem;
+      width: calc(50% - 2.5rem);
+      box-shadow: 0 4px 24px rgba(220,20,60,0.1);
+      border-left: 3px solid var(--crimson);
+      transition: transform .3s ease, box-shadow .3s ease;
+    }
+    .tl-item:nth-child(even) .tl-card { border-left: none; border-right: 3px solid var(--crimson); }
+    .tl-card:hover { transform: translateY(-4px); box-shadow: 0 10px 32px rgba(220,20,60,0.18); }
+
+    .tl-icon {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 48px; height: 48px;
+      background: var(--crimson);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem;
+      box-shadow: 0 4px 16px var(--shadow);
+      z-index: 1;
+    }
+
+    .tl-label {
+      font-size: .7rem;
+      font-weight: 700;
+      letter-spacing: .2rem;
+      text-transform: uppercase;
+      color: var(--crimson);
+      margin-bottom: .3rem;
+    }
+
+    .tl-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin-bottom: .4rem;
+    }
+
+    .tl-desc {
+      font-size: .9rem;
+      color: var(--text-mid);
+      font-style: italic;
+      line-height: 1.6;
+    }
+
+    /* ===========================
+       PHOTO GALLERY
+    =========================== */
+    #gallery {
+      background: var(--white);
+    }
+
+    .gallery-note {
+      text-align: center;
+      font-size: .85rem;
+      color: var(--text-mid);
+      opacity: .7;
+      margin-bottom: 2.5rem;
+      letter-spacing: .05rem;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.2rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .gallery-item {
+      border-radius: 14px;
+      overflow: hidden;
+      aspect-ratio: 1;
+      position: relative;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(220,20,60,0.12);
+      transition: transform .35s ease, box-shadow .35s ease;
+    }
+    .gallery-item:hover { transform: scale(1.04); box-shadow: 0 12px 40px rgba(220,20,60,0.28); }
+
+    .gallery-bg {
+      width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .gallery-item:nth-child(1) .gallery-bg { background: linear-gradient(135deg, #DC143C, #FF6B8A); }
+    .gallery-item:nth-child(2) .gallery-bg { background: linear-gradient(135deg, #A50E2D, #DC143C); }
+    .gallery-item:nth-child(3) .gallery-bg { background: linear-gradient(135deg, #FF6B8A, #FFB3C1); }
+    .gallery-item:nth-child(4) .gallery-bg { background: linear-gradient(135deg, #7B0A21, #A50E2D); }
+    .gallery-item:nth-child(5) .gallery-bg { background: linear-gradient(135deg, #DC143C, #C71F3F); }
+    .gallery-item:nth-child(6) .gallery-bg { background: linear-gradient(135deg, #FF9BAD, #DC143C); }
+
+    .gallery-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 60%);
+      opacity: 0;
+      transition: opacity .35s ease;
+      display: flex;
+      align-items: flex-end;
+      padding: 1rem;
+    }
+    .gallery-item:hover .gallery-overlay { opacity: 1; }
+
+    .gallery-caption {
+      color: var(--white);
+      font-style: italic;
+      font-family: 'Dancing Script', cursive;
+      font-size: 1.05rem;
+      line-height: 1.3;
+    }
+
+    .gallery-heart {
+      font-size: 2.5rem;
+      opacity: .35;
+      user-select: none;
+    }
+
+    /* ===========================
+       FOOTER
+    =========================== */
+    #footer {
+      background: linear-gradient(135deg, #7B0A21, #DC143C);
+      color: var(--white);
+      text-align: center;
+      padding: 3.5rem 1.5rem;
+    }
+
+    .footer-rose { font-size: 2.5rem; margin-bottom: .8rem; }
+
+    .footer-message {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: clamp(1.2rem, 3vw, 1.8rem);
+      color: var(--blush);
+      margin-bottom: .8rem;
+    }
+
+    .footer-date {
+      font-size: .85rem;
+      letter-spacing: .2rem;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.6);
+    }
+
+    /* ===========================
+       SCROLL-TO-TOP BUTTON
+    =========================== */
+    #scroll-top {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      width: 52px; height: 52px;
+      border-radius: 50%;
+      background: var(--crimson);
+      color: var(--white);
+      font-size: 1.5rem;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 20px var(--shadow);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 999;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity .35s ease, transform .35s ease, background .2s;
+      pointer-events: none;
+    }
+    #scroll-top.show { opacity: 1; transform: translateY(0); pointer-events: auto; }
+    #scroll-top:hover { background: var(--crimson-dark); }
+
+    /* ===========================
+       KEYFRAMES
+    =========================== */
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50%       { transform: scale(1.12); }
+    }
+
+    /* ===========================
+       RESPONSIVE
+    =========================== */
+    @media (max-width: 700px) {
+      .timeline::before { left: 28px; }
+
+      .tl-item,
+      .tl-item:nth-child(even) { flex-direction: row; }
+
+      .tl-card,
+      .tl-item:nth-child(even) .tl-card {
+        width: calc(100% - 70px);
+        margin-left: 70px;
+        border-left: 3px solid var(--crimson);
+        border-right: none;
+      }
+
+      .tl-icon {
+        left: 28px;
+        width: 40px; height: 40px;
+        font-size: 1rem;
+      }
+
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 480px) {
+      .gallery-grid { grid-template-columns: 1fr; }
+      .cd-box { min-width: 80px; padding: 1.2rem 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ================================
+       FALLING PETALS
+  ================================ -->
+  <div id="petals-container" aria-hidden="true"></div>
+
+  <!-- ================================
+       1. HERO
+  ================================ -->
+  <section id="hero">
+    <div class="hero-content">
+      <div class="hero-hearts">🌹 💕 🌹</div>
+      <h1 class="hero-title">Sora &amp; Shin</h1>
+      <p class="hero-sub">One Year of Us 💕</p>
+      <span class="hero-date">April 7, 2026</span>
+    </div>
+  </section>
+
+  <!-- ================================
+       2. COUNTDOWN
+  ================================ -->
+  <section id="countdown">
+    <div class="section-inner reveal">
+      <p class="section-label">⏳ Counting Every Second</p>
+      <h2 class="section-title">Until Our Special Day</h2>
+      <div class="section-divider"><span></span>💕<span></span></div>
+
+      <div class="countdown-grid">
+        <div class="cd-box">
+          <div class="cd-number" id="cd-days">--</div>
+          <div class="cd-label">Days</div>
+        </div>
+        <div class="cd-box">
+          <div class="cd-number" id="cd-hours">--</div>
+          <div class="cd-label">Hours</div>
+        </div>
+        <div class="cd-box">
+          <div class="cd-number" id="cd-mins">--</div>
+          <div class="cd-label">Minutes</div>
+        </div>
+        <div class="cd-box">
+          <div class="cd-number" id="cd-secs">--</div>
+          <div class="cd-label">Seconds</div>
+        </div>
+      </div>
+
+      <p id="countdown-expired">
+        🎉 Happy One Year Anniversary, Sora &amp; Shin! 🎉
+      </p>
+    </div>
+  </section>
+
+  <!-- ================================
+       3. LOVE LETTER
+  ================================ -->
+  <section id="letter">
+    <div class="section-inner reveal">
+      <p class="section-label" style="text-align:center">💌 From Shin, With Love</p>
+      <h2 class="section-title" style="text-align:center">A Letter For You</h2>
+      <div class="section-divider"><span></span>🌹<span></span></div>
+
+      <div class="letter-wrapper">
+        <p class="letter-date">April 7, 2026</p>
+
+        <p class="letter-salutation">My dearest Sora,</p>
+
+        <div class="letter-body">
+          <p>
+            One year. Three hundred and sixty-five sunrises. And somehow, every single one of
+            them has been more beautiful because you were there to share it with me.
+          </p>
+          <p>
+            The day we met changed everything. I don't think I fully understood what it meant
+            to have someone light up your world — not until you walked into mine. Your laugh,
+            your warmth, the way your eyes hold a whole universe in them — you turned ordinary
+            days into something I never want to forget.
+          </p>
+          <p>
+            You are my favourite person. Not just on the easy, golden days, but on every
+            in-between moment too — the quiet evenings, the silly arguments we always laugh
+            about later, the adventures big and small. With you, even the simplest things
+            feel magical.
+          </p>
+          <p>
+            I cherish every single memory we have built together, and I promise I will keep
+            building more with you — more laughter, more adventures, more late-night talks
+            about everything and nothing at all.
+          </p>
+          <p>
+            Here we are at one year, and I can already see forever when I look at you. Thank
+            you for choosing me every single day. Thank you for being you. Thank you for
+            being mine.
+          </p>
+          <p>
+            Here's to us, Sora. Here's to every year still to come. 💕
+          </p>
+        </div>
+
+        <p class="letter-sign">
+          Forever yours,<br />Shin 🌹
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================
+       4. TIMELINE
+  ================================ -->
+  <section id="timeline">
+    <div class="section-inner reveal">
+      <p class="section-label" style="text-align:center">📖 Our Journey</p>
+      <h2 class="section-title" style="text-align:center">Our Story</h2>
+      <div class="section-divider"><span></span>💫<span></span></div>
+
+      <div class="timeline">
+
+        <div class="tl-item reveal">
+          <div class="tl-card">
+            <p class="tl-label">April 7, 2025</p>
+            <p class="tl-title">💫 The Day We Met</p>
+            <p class="tl-desc">"The moment everything changed… I didn't know it yet, but you were about to become my whole world."</p>
+          </div>
+          <div class="tl-icon">💫</div>
+        </div>
+
+        <div class="tl-item reveal">
+          <div class="tl-card">
+            <p class="tl-label">Spring 2025</p>
+            <p class="tl-title">🌸 Our First Date</p>
+            <p class="tl-desc">"A day I'll never forget. You smiled and I knew — this is someone incredibly special."</p>
+          </div>
+          <div class="tl-icon">🌸</div>
+        </div>
+
+        <div class="tl-item reveal">
+          <div class="tl-card">
+            <p class="tl-label">Summer 2025</p>
+            <p class="tl-title">💌 When I Knew</p>
+            <p class="tl-desc">"I knew you were the one when you made me feel completely at home, just by being you."</p>
+          </div>
+          <div class="tl-icon">💌</div>
+        </div>
+
+        <div class="tl-item reveal">
+          <div class="tl-card">
+            <p class="tl-label">2025 – 2026</p>
+            <p class="tl-title">🌍 Adventures Together</p>
+            <p class="tl-desc">"Every moment with you is an adventure. You make even the ordinary extraordinary."</p>
+          </div>
+          <div class="tl-icon">🌍</div>
+        </div>
+
+        <div class="tl-item reveal">
+          <div class="tl-card">
+            <p class="tl-label">April 7, 2026</p>
+            <p class="tl-title">🎉 One Year Strong</p>
+            <p class="tl-desc">"Here's to forever. To every year that comes after this one, as long as it's with you."</p>
+          </div>
+          <div class="tl-icon">🎉</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================
+       5. PHOTO GALLERY
+  ================================ -->
+  <section id="gallery">
+    <div class="section-inner reveal">
+      <p class="section-label" style="text-align:center">🖼️ Our Memories</p>
+      <h2 class="section-title" style="text-align:center">A Year in Pictures</h2>
+      <div class="section-divider"><span></span>🌹<span></span></div>
+      <p class="gallery-note">📸 Add your photos here</p>
+
+      <div class="gallery-grid">
+
+        <div class="gallery-item reveal">
+          <div class="gallery-bg">
+            <span class="gallery-heart">💕</span>
+          </div>
+          <div class="gallery-overlay">
+            <span class="gallery-caption">Our first memory together 💕</span>
+          </div>
+        </div>
+
+        <div class="gallery-item reveal">
+          <div class="gallery-bg">
+            <span class="gallery-heart">🌹</span>
+          </div>
+          <div class="gallery-overlay">
+            <span class="gallery-caption">You make every day brighter 🌹</span>
+          </div>
+        </div>
+
+        <div class="gallery-item reveal">
+          <div class="gallery-bg">
+            <span class="gallery-heart">💫</span>
+          </div>
+          <div class="gallery-overlay">
+            <span class="gallery-caption">My favorite adventure partner 💫</span>
+          </div>
+        </div>
+
+        <div class="gallery-item reveal">
+          <div class="gallery-bg">
+            <span class="gallery-heart">🥰</span>
+          </div>
+          <div class="gallery-overlay">
+            <span class="gallery-caption">Forever my favorite person 🥰</span>
+          </div>
+        </div>
+
+        <div class="gallery-item reveal">
+          <div class="gallery-bg">
+            <span class="gallery-heart">✨</span>
+          </div>
+          <div class="gallery-overlay">
+            <span class="gallery-caption">Every moment with you is magic ✨</span>
+          </div>
+        </div>
+
+        <div class="gallery-item reveal">
+          <div class="gallery-bg">
+            <span class="gallery-heart">💑</span>
+          </div>
+          <div class="gallery-overlay">
+            <span class="gallery-caption">A love like ours 💑</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================
+       6. FOOTER
+  ================================ -->
+  <footer id="footer">
+    <div class="footer-rose">🌹</div>
+    <p class="footer-message">Made with 💕 by Shin, for Sora</p>
+    <p class="footer-date">April 7, 2026 · One Year of Us</p>
+  </footer>
+
+  <!-- Scroll-to-top -->
+  <button id="scroll-top" aria-label="Scroll to top" title="Back to top">🌹</button>
+
+  <!-- ================================
+       JAVASCRIPT
+  ================================ -->
+  <script>
+    /* ---- Falling petals ---- */
+    (function spawnPetals() {
+      const emojis = ['🌹', '🌸', '💕', '❤️', '🌺', '💗'];
+      const container = document.getElementById('petals-container');
+      const COUNT = 18;
+
+      for (let i = 0; i < COUNT; i++) {
+        const el = document.createElement('div');
+        el.className = 'petal';
+        el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+
+        const left  = Math.random() * 100;
+        const delay = Math.random() * 14;
+        const dur   = 8 + Math.random() * 10;
+        const size  = 0.9 + Math.random() * 0.9;
+
+        el.style.cssText = `
+          left: ${left}vw;
+          animation-duration: ${dur}s;
+          animation-delay: ${delay}s;
+          font-size: ${size}rem;
+        `;
+        container.appendChild(el);
+      }
+    })();
+
+    /* ---- Countdown ---- */
+    (function initCountdown() {
+      const target = new Date('2026-04-07T00:00:00');
+
+      function update() {
+        const now  = new Date();
+        const diff = target - now;
+
+        if (diff <= 0) {
+          document.querySelector('.countdown-grid').style.display = 'none';
+          document.getElementById('countdown-expired').style.display = 'block';
+          return;
+        }
+
+        const d  = Math.floor(diff / 86400000);
+        const h  = Math.floor((diff % 86400000) / 3600000);
+        const m  = Math.floor((diff % 3600000)  / 60000);
+        const s  = Math.floor((diff % 60000)    / 1000);
+
+        document.getElementById('cd-days').textContent  = String(d).padStart(2, '0');
+        document.getElementById('cd-hours').textContent = String(h).padStart(2, '0');
+        document.getElementById('cd-mins').textContent  = String(m).padStart(2, '0');
+        document.getElementById('cd-secs').textContent  = String(s).padStart(2, '0');
+      }
+
+      update();
+      setInterval(update, 1000);
+    })();
+
+    /* ---- Scroll reveal ---- */
+    (function initReveal() {
+      const els = document.querySelectorAll('.reveal');
+      const io  = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            e.target.classList.add('visible');
+            io.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.15 });
+
+      els.forEach(el => io.observe(el));
+    })();
+
+    /* ---- Scroll-to-top button ---- */
+    (function initScrollTop() {
+      const btn = document.getElementById('scroll-top');
+
+      window.addEventListener('scroll', () => {
+        btn.classList.toggle('show', window.scrollY > 400);
+      }, { passive: true });
+
+      btn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    })();
+  </script>
+</body>
+</html>
