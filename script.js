@@ -58,7 +58,7 @@
           <div class="tl-dot"></div>
           <div class="tl-date">Three Years Ago</div>
           <div class="tl-title">Best Friends</div>
-          <div class="tl-body">"I carried feelings for you quietly for years. You were my best friend and I didn't want to ruin it. So I kept it. And loved you anyway, in every way I was allowed to."</div>
+          <div class="tl-body">"I carried feelings for you quietly for years. You were my best friend and I didn't want to ruin it. So I kept it. And loved you anyway, in every way I was allowed to...Gbora Gbei Gbusuru."</div>
         </div>
         <div class="tl-item">
           <div class="tl-dot"></div>
