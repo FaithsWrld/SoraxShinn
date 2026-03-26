@@ -1,21 +1,50 @@
-// PARTICLES
+// THEME TOGGLE
+    (function initTheme() {
+      const saved = localStorage.getItem('theme');
+      if (saved === 'light') document.documentElement.setAttribute('data-theme', 'light');
+    })();
+    const themeToggle = document.getElementById('themeToggle');
+    if (themeToggle) {
+      themeToggle.addEventListener('click', () => {
+        const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+        if (isLight) {
+          document.documentElement.removeAttribute('data-theme');
+          localStorage.setItem('theme', 'dark');
+        } else {
+          document.documentElement.setAttribute('data-theme', 'light');
+          localStorage.setItem('theme', 'light');
+        }
+      });
+    } else {
+      console.warn('Theme toggle button not found.');
+    }
+
+    // PARTICLES
     const pc = document.getElementById('particles');
-    for (let i = 0; i < 24; i++) {
-      const p = document.createElement('div');
-      p.className = 'particle';
-      const s = Math.random() * 3 + 1.5;
-      p.style.cssText = `width:${s}px;height:${s}px;left:${Math.random()*100}%;--drift:${(Math.random()-0.5)*120}px;animation-duration:${Math.random()*12+10}s;animation-delay:${Math.random()*10}s;background:${Math.random()>0.6?'var(--pink)':'var(--crimson2)'};border-radius:${Math.random()>0.5?'50%':'2px'};`;
-      pc.appendChild(p);
+    if (!pc) {
+      console.warn('Particles container (#particles) not found.');
+    } else {
+      for (let i = 0; i < 24; i++) {
+        const p = document.createElement('div');
+        p.className = 'particle';
+        const s = Math.random() * 3 + 1.5;
+        p.style.cssText = `width:${s}px;height:${s}px;left:${Math.random()*100}%;--drift:${(Math.random()-0.5)*120}px;animation-duration:${Math.random()*12+10}s;animation-delay:${Math.random()*10}s;background:${Math.random()>0.6?'var(--pink)':'var(--crimson2)'};border-radius:${Math.random()>0.5?'50%':'2px'};`;
+        pc.appendChild(p);
+      }
     }
 
     // COUNTDOWN + LOCK
     // 12:00 AM on April 7, 2026 in Nigeria (WAT, UTC+1) == 11:00 PM UTC on April 6, 2026.
     const TARGET = new Date(Date.UTC(2026, 3, 6, 23, 0, 0));
+    if (isNaN(TARGET.getTime())) console.warn('TARGET date is invalid; countdown may not function correctly.');
     let hasUnlocked = false;
     let isReadyToUnlock = false;
     const unlockBtn = document.getElementById('unlockBtn');
     const unlockCele = document.getElementById('unlockCele');
     const unlockedContent = document.getElementById('unlockedContent');
+    if (!unlockBtn) console.warn('Unlock button (#unlockBtn) not found.');
+    if (!unlockCele) console.warn('Unlock celebration element (#unlockCele) not found.');
+    if (!unlockedContent) console.warn('Unlocked content container (#unlockedContent) not found.');
     const unlockedMarkup = `
     <section class="letter-section">
       <div class="letter-top">
@@ -125,14 +154,33 @@
       });
     }
 
+    function bindImageErrorHandlers(root = document) {
+      root.querySelectorAll('.g-cell img').forEach(img => {
+        img.addEventListener('error', () => {
+          console.warn(`Gallery image failed to load: ${img.src}`);
+          img.style.display = 'none';
+          const cell = img.closest('.g-cell');
+          if (cell && !cell.querySelector('.g-ph')) {
+            const placeholder = document.createElement('span');
+            placeholder.className = 'g-ph';
+            placeholder.setAttribute('aria-hidden', 'true');
+            placeholder.textContent = '📷';
+            cell.insertBefore(placeholder, cell.firstChild);
+          }
+        });
+      });
+    }
+
     function renderUnlockedContent() {
       if (!unlockedContent || unlockedContent.childElementCount > 0) return;
       unlockedContent.innerHTML = unlockedMarkup;
       bindRevealTargets(unlockedContent);
       bindGalleryGlow(unlockedContent);
+      bindImageErrorHandlers(unlockedContent);
     }
 
     function burst() {
+      if (!pc) return;
       for (let i = 0; i < 50; i++) {
         const p = document.createElement('div');
         p.className = 'particle';
@@ -187,7 +235,9 @@
       if (hasUnlocked) return;
       hasUnlocked = true;
       renderUnlockedContent();
-      document.getElementById('lockScreen').style.display = 'none';
+      const lockScreen = document.getElementById('lockScreen');
+      if (lockScreen) lockScreen.style.display = 'none';
+      else console.warn('Lock screen element (#lockScreen) not found.');
       unlockedContent.classList.add('revealed');
       unlockBtn?.classList.remove('show');
       burst();
@@ -204,9 +254,15 @@
       const diff = TARGET - new Date();
       if (diff <= 0) {
         isReadyToUnlock = true;
-        ['days','hours','minutes','seconds'].forEach(id => document.getElementById(id).textContent = '00');
-        document.getElementById('cdMsg').textContent = 'It is April 7, 12:00 AM in Nigeria. Click the button below to unlock the page.';
+        ['days','hours','minutes','seconds'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.textContent = '00';
+          else console.warn(`Countdown element #${id} not found.`);
+        });
+        const cdMsgEl = document.getElementById('cdMsg');
+        if (cdMsgEl) cdMsgEl.textContent = 'It is April 7, 12:00 AM in Nigeria. Click the button below to unlock the page.';
         unlockBtn?.classList.add('show');
+        clearInterval(countdownTimer);
         return;
       }
       const d = Math.floor(diff/86400000);
@@ -219,12 +275,15 @@
       document.getElementById('seconds').textContent = String(s).padStart(2,'0');
     }
 
+    let countdownTimer = null;
     if (new Date() >= TARGET) {
       isReadyToUnlock = true;
       unlockBtn?.classList.add('show');
     }
     tick();
-    setInterval(tick, 1000);
+    if (new Date() < TARGET) {
+      countdownTimer = setInterval(tick, 1000);
+    }
 
     // SCROLL REVEAL
     const obs = new IntersectionObserver((entries) => {
