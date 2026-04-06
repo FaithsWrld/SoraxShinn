@@ -34,7 +34,7 @@
     }
 
     // COUNTDOWN + LOCK
-    // 12:00 AM on April 7, 2026 in Nigeria (WAT, UTC+1) == 11:00 PM UTC on April 6, 2026.
+    // 12:00 AM on April 7, 2026 in Nigeria (WAT, UTC+1) and UK (BST, UTC+1) == 11:00 PM UTC on April 6, 2026.
     const TARGET = new Date(Date.UTC(2026, 3, 6, 23, 0, 0));
     if (isNaN(TARGET.getTime())) console.warn('TARGET date is invalid; countdown may not function correctly.');
     let hasUnlocked = false;
@@ -260,7 +260,7 @@
           else console.warn(`Countdown element #${id} not found.`);
         });
         const cdMsgEl = document.getElementById('cdMsg');
-        if (cdMsgEl) cdMsgEl.textContent = 'It is April 7, 12:00 AM in Nigeria. Click the button below to unlock the page.';
+        if (cdMsgEl) cdMsgEl.textContent = 'It is April 7, 12:00 AM in Nigeria and the UK. Click the button below to unlock the page.';
         unlockBtn?.classList.add('show');
         clearInterval(countdownTimer);
         return;
